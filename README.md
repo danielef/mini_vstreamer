@@ -19,7 +19,8 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-
+Install this application in develop mode and start it:
 ```
+python setup.py develop
 python -m mini_vstreamer.app
 ```
