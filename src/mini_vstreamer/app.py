@@ -1,7 +1,8 @@
 import logging
 
 from flask import Flask, Blueprint
-from mini_vstreamer.api.defaults import api
+from mini_vstreamer.api.defaults import api, system
+from mini_vstreamer.api.endpoints.configs import ns as config_ns
 
 app = Flask(__name__)
 
@@ -24,16 +25,27 @@ def initialize_app(flask_app):
     @flask_app.route('/foo')
     def foo():
         return 'foo'
-    #api.add_namespace(blog_posts_namespace)
+    api.add_namespace(config_ns)
     #api.add_namespace(blog_categories_namespace)
     flask_app.register_blueprint(blueprint)
 
-    #db.init_app(flask_app)
+    #db.init_app(flask_app
+
+def initialize_system(system):
+    system['cameras'] = {}
+    system['cameras']['default'] ={
+        'id': 0,
+        'name': 'default',
+        'fps': 0,
+        'width': 0,
+        'height': 0
+    }
 
 def main():
+    initialize_system(system)
     initialize_app(app)
     logging.info('>>>>> Starting development server at http://{}/api/ <<<<<'.format(app.config['SERVER_NAME']))
     app.run(debug=True)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
