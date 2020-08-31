@@ -1,14 +1,26 @@
 import json
 
-from mini_vstreamer.app import initialize_app, initialize_system
+from mini_vstreamer.app import initialize_app
 from mini_vstreamer.api.defaults import system
 from flask import Flask
+
+def initialize_system(system):
+    system['cameras'] = {}
+    system['cameras']['default'] ={
+        'id': 0,
+        'name': 'default',
+        'fps': 0,
+        'width': 0,
+        'height': 0
+    }
 
 app = Flask(__name__)
 initialize_system(system)
 initialize_app(app)
 
 client = app.test_client()
+
+
 
 def test_base():
     url = '/'
