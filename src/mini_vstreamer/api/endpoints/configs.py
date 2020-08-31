@@ -15,4 +15,8 @@ class ConfigItem(Resource):
     
     @api.marshal_with(config_model)
     def get(self, name):
-        return system['cameras'][name]
+        if name in system['cameras']:
+            return system['cameras'][name]
+        else:
+            return 'Camera not found', 404
+            
