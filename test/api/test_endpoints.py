@@ -39,3 +39,8 @@ def test_config():
     response = client.get(url)
     assert response.json == system['cameras']['default']
     assert response.status_code == 200
+
+def test_config_not_found():
+    url = '/api/config/foo'
+    response = client.get(url)
+    assert response.status_code == 404
