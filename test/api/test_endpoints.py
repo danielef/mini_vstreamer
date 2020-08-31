@@ -6,20 +6,18 @@ from flask import Flask
 
 def initialize_system(system):
     system['cameras'] = {}
-    system['cameras']['default'] ={
-        'id': 0,
-        'name': 'default',
-        'fps': 0,
-        'width': 0,
-        'height': 0
-    }
+    system['cameras']['default'] = { 'id': 0,
+                                     'name': 'default',
+                                     'fps': 0,
+                                     'width': 0,
+                                     'height': 0 }
+
 
 app = Flask(__name__)
 initialize_system(system)
 initialize_app(app)
 
 client = app.test_client()
-
 
 
 def test_base():
@@ -39,6 +37,5 @@ def test_not_found():
 def test_config():
     url = '/api/config/default'
     response = client.get(url)
-    
-    print(dir(response))
+    assert response.json == system['cameras']['default']
     assert response.status_code == 200
