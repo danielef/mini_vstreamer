@@ -1,10 +1,8 @@
 import logging
 
-from flask import Flask, Blueprint
-from mini_vstreamer.api.defaults import api, system
+from flask import Blueprint
+from mini_vstreamer.api.defaults import app, api, system
 from mini_vstreamer.api.endpoints.configs import ns as config_ns
-
-app = Flask(__name__)
 
 def setup(flask_app):
     flask_app.config['SERVER_NAME'] = 'localhost:8888'
