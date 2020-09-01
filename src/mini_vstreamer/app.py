@@ -16,10 +16,6 @@ def initialize_app(flask_app):
     blueprint = Blueprint('api', __name__, url_prefix='/api')
     api.init_app(blueprint)
 
-    @flask_app.route('/')
-    def hello_world():
-        return 'ok'
-
     @flask_app.route('/foo')
     def foo():
         return 'foo'
