@@ -1,8 +1,8 @@
 from flask_restx import fields, Resource
 from mini_vstreamer.api.defaults import api, system
 
-ns = api.namespace('config', description='Config camera parameters')
-ns_plural = api.namespace('configs', description='All camera configurations')
+ns = api.namespace('camera', description='Camera parameters')
+ns_plural = api.namespace('cameras', description='All camera configurations')
 
 config_model = api.model('Camera config', { 'name' : fields.String(description='Camera Name'),
                                             'fps' : fields.Integer(description='Camera Frames Per Second'),
@@ -11,7 +11,7 @@ config_model = api.model('Camera config', { 'name' : fields.String(description='
 
 
 @ns.route('/<string:name>')
-class ConfigItem(Resource):
+class CameraItem(Resource):
     
     @api.marshal_with(config_model)
     def get(self, name):
@@ -21,7 +21,7 @@ class ConfigItem(Resource):
             return 'Camera not found', 404
             
 @ns_plural.route('/')
-class ConfigItems(Resource):
+class CameraItems(Resource):
 
     def get(self):
         return system['cameras']
