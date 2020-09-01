@@ -1,19 +1,16 @@
 import json
 
 from mini_vstreamer.app import initialize_app
-from mini_vstreamer.api.defaults import system
+from mini_vstreamer.api.defaults import app, system
 from flask import Flask
 
 def initialize_system(system):
     system['cameras'] = {}
-    system['cameras']['default'] = { 'id': 0,
-                                     'name': 'default',
+    system['cameras']['default'] = { 'name': 'default',
                                      'fps': 0,
                                      'width': 0,
                                      'height': 0 }
 
-
-app = Flask(__name__)
 initialize_system(system)
 initialize_app(app)
 
@@ -24,7 +21,7 @@ def test_base():
     url = '/'
     response = client.get(url)
 
-    assert response.get_data().decode('utf-8') == 'ok'
+    assert response.json == {'mini_vstreamer': 0.1}
     assert response.status_code == 200
     
 def test_not_found():
