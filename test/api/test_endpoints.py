@@ -32,7 +32,7 @@ def test_not_found():
     assert response.status_code == 404
 
 def test_cameras():
-    url = '/api/cameras/default'
+    url = '/api/camera/default'
     response = client.get(url)
     assert response.json == system['cameras']['default']
     assert response.status_code == 200
