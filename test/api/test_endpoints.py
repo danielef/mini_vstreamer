@@ -31,8 +31,8 @@ def test_not_found():
     assert response.get_data().decode('utf-8') != 'ok'
     assert response.status_code == 404
 
-def test_config():
-    url = '/api/config/default'
+def test_cameras():
+    url = '/api/cameras/default'
     response = client.get(url)
     assert response.json == system['cameras']['default']
     assert response.status_code == 200
