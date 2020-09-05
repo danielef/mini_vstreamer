@@ -20,8 +20,8 @@ client = app.test_client()
 def test_base():
     url = '/'
     response = client.get(url)
-
-    assert response.json == {'mini_vstreamer': 0.1}
+    
+    assert response.json == {'mini_vstreamer': 0.1 , 'docs' : '/api'}
     assert response.status_code == 200
     
 def test_not_found():
