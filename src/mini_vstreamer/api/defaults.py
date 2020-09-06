@@ -13,7 +13,7 @@ system = {}
 
 @app.route('/')
 def base():
-    return {'mini_vstreamer': 0.1}
+    return {'mini_vstreamer': 0.1, 'docs': '/api'}
 
 @api.errorhandler
 def default_error_handler(e):
