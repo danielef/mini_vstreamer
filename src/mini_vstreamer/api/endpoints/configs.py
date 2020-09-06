@@ -11,7 +11,7 @@ config_model = api.model('Camera config', { 'name' : fields.String(description='
 
 
 @ns.route('/<string:name>')
-class CameraItem(Resource):
+class CameraDispacher(Resource):
     
     @api.marshal_with(config_model)
     def get(self, name):
@@ -19,7 +19,19 @@ class CameraItem(Resource):
             return system['cameras'][name]
         else:
             return 'Camera not found', 404
-            
+
+
+@ns.route('/<string:name>/<string:field>/<string:value>')
+class CameraUpdater(Resource):
+
+    def put(self, name, field, value):
+        if name in system['cameras']:
+            system['cameras'][name][field] = value
+            return system['cameras'][name]
+        else:
+            return 'Camera \'{}\' not found'.format(name), 404
+
+
 @ns_plural.route('/')
 class CameraItems(Resource):
 
