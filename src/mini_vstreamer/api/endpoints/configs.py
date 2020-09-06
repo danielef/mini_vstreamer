@@ -26,7 +26,8 @@ class CameraUpdater(Resource):
 
     def put(self, name, field, value):
         if name in system['cameras']:
-            system['cameras'][name][field] = value
+            print('cm: {}'.format(config_model))
+            system['cameras'][name][field] = value  #value automatic typing!
             return system['cameras'][name]
         else:
             return 'Camera \'{}\' not found'.format(name), 404
