@@ -26,7 +26,7 @@ class CameraUpdater(Resource):
 
     def put(self, name, field, value):
         if name in system['cameras']:
-            print('cm: {}'.format(config_model))
+            print('cm: {}'.format(config_model[field].format(value)))
             system['cameras'][name][field] = value  #value automatic typing!
             return system['cameras'][name]
         else:
