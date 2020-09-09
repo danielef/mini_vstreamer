@@ -1,0 +1,7 @@
+config:
+- item: 1
+  value: val1
+- cfg:
+  - foo: bar
+  item: 2
+  value: val2
