@@ -46,8 +46,13 @@ def test_camera():
 def test_camera_update():
     url = '/api/camera/default/fps/1'
     response = client.put(url)
-    print(response.json)
     assert response.json['fps'] == 1
+    assert response.status_code == 200
+
+def test_camera_state():
+    url = '/api/camera/default/start'
+    response = client.post(url)
+    assert system['cameras']['default'].status() == 'running'
     assert response.status_code == 200
 
 def test_config_not_found():
