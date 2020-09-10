@@ -14,7 +14,7 @@ class Queue(Configurable, Q):
 
     def get(self, key=None, default=None):
         if key is None and default is None:
-            return Queue.get(self)
+            return Q.get(self)
         else:
             return Configurable.get(self, key, default)
 
