@@ -6,6 +6,7 @@ from time import time, sleep
 
 import cv2
 import logging
+import subprocess
 
 def open_gst_rtsp(uri, width=None, height=None, latency=2000):
     """Open an RTSP URI (IP CAM)."""
