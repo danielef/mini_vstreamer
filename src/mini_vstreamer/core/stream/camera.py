@@ -96,6 +96,7 @@ class Camera(Configurable, Runnable):
         self.__open()
         while self.__running__:
             sleep(self.__wait__)
+            self.__videoCapture__.grab()
             _, frame = self.__videoCapture__.read()
             if frame is None:
                 logging.error('Camera {} error loading frame'.format(self.get('name')))
