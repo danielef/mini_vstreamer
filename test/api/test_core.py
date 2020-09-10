@@ -1,5 +1,8 @@
 from mini_vstreamer.core.config import ConfigIO, Configurable
+from mini_vstreamer.core.thread import Runnable
 
+import logging
+import time
 
 class MyConfigurable(Configurable):
 
@@ -11,9 +14,25 @@ class MyConfigurable(Configurable):
 
     def set(self, key, value):
         if key == 'one':
-            log.warn('Unsupported set of key: {}'.format(key))
+            logging.warn('Unsupported set of key: {}'.format(key))
         else:
             super().set(key, value)
+
+
+class MyRunnable(Runnable):
+
+    '''
+    Example
+    '''
+    def __init__(self):
+        super().__init__('runnable')
+        self.__count__ = 1
+
+    def run(self):
+        while self.__running__:
+            logging.info('Running and sleeping {} seconds'.format(self.__count__))
+            time.sleep(self.__count__)
+            self.__count__ += 1
 
 
 def test_configio():
@@ -33,3 +52,12 @@ def test_configio():
     assert c.__dict__['config'][0]['value'] == 'val3'
     e.set('value', 'val1')
     assert e.get('value') == 'val1'
+
+
+def test_runnable():
+    r = MyRunnable()
+    assert r.status() == 'awaiting'
+    r.start()
+    assert r.status() == 'running'
+    r.stop()
+    assert r.status() == 'stopped'
