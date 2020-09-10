@@ -5,3 +5,6 @@ config:
   - foo: bar
   item: 2
   value: val2
+queues:
+- depth: 120
+  name: frames

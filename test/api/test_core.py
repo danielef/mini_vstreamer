@@ -37,7 +37,8 @@ class MyRunnable(Runnable):
 
 def test_configio():
     d = {'config': [{'item': 1, 'value': 'val1'}, 
-                    {'item': 2, 'value': 'val2', 'cfg': [{'foo': 'bar'}]}], 
+                    {'item': 2, 'value': 'val2', 'cfg': [{'foo': 'bar'}]}],
+         'queues': [{'depth': 120, 'name': 'frames'}],
          '__path__': './test/config-test.yml'}
     c = ConfigIO('./test/config-test.yml')
 
