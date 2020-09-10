@@ -40,16 +40,20 @@ class CameraItems(Resource):
     def get(self):
         return system['cameras']
 
-def encode(name):
+def encode(name, scale):
     while True:
         encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
-        result, img_encoded = cv2.imencode('.jpg', system['video'][name], encode_param)
+        image = system['video'][name]
+        if scale > 1:
+            image = cv2.resize(image, (image.shape[1] // scale, image.shape[0] // scale))
+        result, img_encoded = cv2.imencode('.jpg', image, encode_param)
         contents = img_encoded.tobytes()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + contents + b'\r\n')
 
-@ns.route('/<string:name>/video')
+@ns.route('/<string:name>/video', defaults={'scale': 1})
+@ns.route('/<string:name>/video/<int:scale>')
 class CameraVideo(Resource):
 
-    def get(self, name):
-        return Response(encode(name), mimetype='multipart/x-mixed-replace; boundary=frame')
+    def get(self, name, scale):
+        return Response(encode(name, scale), mimetype='multipart/x-mixed-replace; boundary=frame')
