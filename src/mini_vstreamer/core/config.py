@@ -99,7 +99,7 @@ class Configurable:
         return self.__configio__[self.__configContext__][self.__index__]
 
     def setQueues(self):
-        if not get_with_default(self.__system__, 'queues', False):
+        if self.__system__.get('queues', None) is None:
             return log.error('system without queues initialized')
         in_queue_name = self.get('qIn', None)
         out_queue_name = self.get('qOut', None)
