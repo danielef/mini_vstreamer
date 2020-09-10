@@ -96,15 +96,15 @@ class Camera(Configurable, Runnable):
         self.__open()
         while self.__running__:
             sleep(self.__wait__)
-            self.__videoCapture__.grab()
-            _, frame = self.__videoCapture__.read()
-            if frame is None:
-                logging.error('Camera {} error loading frame'.format(self.get('name')))
-                self.__release()
-                self.__open()
-                self.__measureFPS()
-            else:
-                self.__outQ__.put((self.get('name'), frame))
+            if self.__videoCapture__.grab():
+                _, frame = self.__videoCapture__.retrieve()
+                if frame is None:
+                    logging.error('Camera {} error loading frame'.format(self.get('name')))
+                    self.__release()
+                    self.__open()
+                    self.__measureFPS()
+                else:
+                    self.__outQ__.put((self.get('name'), frame))
         return self
 
 
