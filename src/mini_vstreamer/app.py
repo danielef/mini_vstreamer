@@ -1,8 +1,11 @@
 import logging
-
+from threading import Thread
 from flask import Blueprint
 from mini_vstreamer.api.defaults import app, api, system
 from mini_vstreamer.api.endpoints.configs import ns as config_ns
+from mini_vstreamer.core.config import ConfigIO
+from mini_vstreamer.core.stream.queue import mutate_system as load_queues
+from mini_vstreamer.core.stream.camera import mutate_system as load_cameras
 
 def setup(flask_app):
     flask_app.config['SERVER_NAME'] = 'localhost:8888'
@@ -35,11 +38,28 @@ def initialize_system(system):
         'height': 0
     }
 
+def independent_collector():
+    while True:
+        if  system['queues']['frames'] is None:
+            print('queue is None')
+
+        camera_name, frame = system['queues']['frames'].get()
+        system['video'][camera_name] = frame
+        system['queues']['frames'].task_done()
+
 def main():
     initialize_system(system)
     initialize_app(app)
     logging.info('>>>>> Starting development server at http://{}/api/ <<<<<'.format(app.config['SERVER_NAME']))
-    app.run(debug=True)
+    config = ConfigIO('./config.yaml')
+    load_queues(config)
+    load_cameras(config)
+
+    c_thread = Thread(name='Collector' ,target=independent_collector, args=())
+    c_thread.daemon=True
+    c_thread.start()
+
+    app.run(threaded=True)
 
 if __name__ == '__main__':
     main()
