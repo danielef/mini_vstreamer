@@ -9,7 +9,7 @@ api = Api(version='0.1',
           title='mini-vstreamer',
           description='Mini Video Streamer via HTTP')
 
-system = {}
+system = {'video': {}}
 
 @app.route('/')
 def base():
