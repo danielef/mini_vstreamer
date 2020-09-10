@@ -59,7 +59,7 @@ def main():
     c_thread.daemon=True
     c_thread.start()
 
-    app.run(threaded=True)
+    app.run(host='0.0.0.0', threaded=True)
 
 if __name__ == '__main__':
     main()
