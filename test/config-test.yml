@@ -1,10 +1,8 @@
-config:
-- item: 1
-  value: val1
-- cfg:
-  - foo: bar
-  item: 2
-  value: val2
+cameras:
+- name: default
+  videoURL: 0
+  defaultFPS: 2
+  qOut: frames
 queues:
 - depth: 120
   name: frames
