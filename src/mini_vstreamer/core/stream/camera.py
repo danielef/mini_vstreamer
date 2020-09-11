@@ -21,8 +21,7 @@ def open_gst_rtsp(uri, width=None, height=None, latency=2000):
             xraw = 'video/x-raw, height=(int){}, '.format(height)
         else:
             xraw = 'video/x-raw, '
-
-        # Use hardware H.264 decoder on Jetson platforms
+        # Uses NVDEC H.264 decoder on Jetson
         gst_str = ('rtspsrc location={} latency={} ! '
                    'rtph264depay ! h264parse ! omxh264dec ! '
                    'nvvidconv ! '
@@ -30,9 +29,7 @@ def open_gst_rtsp(uri, width=None, height=None, latency=2000):
                    'format=(string)BGRx ! videoconvert ! '
                    'appsink').format(uri, latency, width, height)
     elif 'avdec_h264' in gst_elements:
-        # Otherwise try to use the software decoder 'avdec_h264'
-        # NOTE: in case resizing images is necessary, try adding
-        #       a 'videoscale' into the pipeline
+        # Software decoder avdec_h264
         gst_str = ('rtspsrc location={} latency={} ! '
                    'rtph264depay ! h264parse ! avdec_h264 ! '
                    'videoconvert ! appsink').format(uri, latency)
@@ -41,6 +38,9 @@ def open_gst_rtsp(uri, width=None, height=None, latency=2000):
     return cv2.VideoCapture(gst_str, cv2.CAP_GSTREAMER)
 
 class Camera(Configurable, Runnable):
+    """
+    Camera Object
+    """
 
     def __init__(self, index, configio, system):
         Configurable.__init__(self, index, configio, system, 'cameras')
