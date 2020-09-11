@@ -8,7 +8,7 @@ from mini_vstreamer.core.stream.queue import mutate_system as load_queues
 from mini_vstreamer.core.stream.camera import mutate_system as load_cameras
 
 def setup(flask_app):
-    flask_app.config['SERVER_NAME'] = 'qbox1.dev.quantumlabs.ai:8888'
+    flask_app.config['SERVER_NAME'] = 'localhost:8888'
     flask_app.config['SWAGGER_UI_DOC_EXPANSION'] = 'list'
     flask_app.config['RESTPLUS_VALIDATE'] = True
     flask_app.config['RESTPLUS_MASK_SWAGGER'] = False
@@ -28,16 +28,6 @@ def initialize_app(flask_app):
 
     #db.init_app(flask_app
 
-def initialize_system(system):
-    system['cameras'] = {}
-    system['cameras']['default'] ={
-        'id': 0,
-        'name': 'default',
-        'fps': 0,
-        'width': 0,
-        'height': 0
-    }
-
 def independent_collector():
     while True:
         if  system['queues']['frames'] is None:
@@ -48,7 +38,6 @@ def independent_collector():
         system['queues']['frames'].task_done()
 
 def main():
-    initialize_system(system)
     initialize_app(app)
     logging.info('>>>>> Starting development server at http://{}/api/ <<<<<'.format(app.config['SERVER_NAME']))
     config = ConfigIO('./config.yaml')
