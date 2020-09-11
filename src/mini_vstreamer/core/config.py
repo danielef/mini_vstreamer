@@ -80,6 +80,10 @@ class Configurable:
         self.__ommitCheckQIn__ = False
         self.__ommitCheckQOut__ = False
 
+    def __repr__(self):
+        '''returns simple dict representation of the mapping'''
+        return str(self.__configio__[self.__configContext__][self.__index__])
+
     def get(self, key=None, default=None):
         return self.__configio__[self.__configContext__][self.__index__].get( key, default)
 
