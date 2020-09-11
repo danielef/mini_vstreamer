@@ -1,4 +1,4 @@
-from flask import Response
+from flask import json, Response
 from flask_restx import fields, Resource
 from mini_vstreamer.api.defaults import api, system
 import cv2
@@ -7,18 +7,16 @@ ns = api.namespace('camera', description='Camera parameters')
 ns_plural = api.namespace('cameras', description='All camera configurations')
 
 config_model = api.model('Camera config', { 'name' : fields.String(description='Camera Name'),
-                                            'fps' : fields.Integer(description='Camera Frames Per Second'),
-                                            'width' : fields.Integer(description='Camera Width Pixels'),
-                                            'height' : fields.Integer(description='Camera Height Pixels')})
-
+                                            'defaultFPS' : fields.Integer(description='Camera Frames Per Second'),
+                                            'qOut' : fields.Integer(description='Out Queue'),
+                                            'videoURL' : fields.Raw(description='Video URL')})
 
 @ns.route('/<string:name>')
 class CameraDispacher(Resource):
     
-    @api.marshal_with(config_model)
     def get(self, name):
         if name in system['cameras']:
-            return system['cameras'][name]
+            return system['cameras'][name].configSlice()
         else:
             return 'Camera not found', 404
 
@@ -28,8 +26,8 @@ class CameraUpdater(Resource):
 
     def put(self, name, field, value):
         if name in system['cameras']:
-            system['cameras'][name][field] = config_model[field].format(value)
-            return system['cameras'][name]
+            system['cameras'][name].set(field, config_model[field].format(value))
+            return system['cameras'][name].configSlice()
         else:
             return 'Camera \'{}\' not found'.format(name), 404
 
@@ -38,7 +36,9 @@ class CameraUpdater(Resource):
 class CameraItems(Resource):
 
     def get(self):
-        return system['cameras']
+        system_map = next(iter(system['cameras'].values())).__configio__.__dict__
+        return system_map['cameras']
+
 
 def encode(name, scale):
     while True:
