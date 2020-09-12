@@ -15,7 +15,7 @@ class Runnable:
 
     def start(self):
         logging.info('Starting {}, name: {}'.format(self.__class__, self.__thread_name__))
-        if not self.__running__ and self.__thread__ is None:
+        if not self.__running__:
             self.__thread__ = Thread(name=self.__thread_name__, target=self.run, args=(), daemon=True)
             self.__running__ = True
             self.__thread__.start()
