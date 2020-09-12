@@ -1,8 +1,8 @@
 cameras:
-- name: default
-  videoURL: 0
-  defaultFPS: 2
+- defaultFPS: 2
+  name: default
   qOut: frames
+  videoURL: 0
 queues:
 - depth: 120
   name: frames
