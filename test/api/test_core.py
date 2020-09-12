@@ -4,13 +4,13 @@ from mini_vstreamer.core.thread import Runnable
 import logging
 import time
 
-class MyConfigurable(Configurable):
+class MyCustomConfigurable(Configurable):
 
     '''
     Example
     '''
-    def __init__(self, index, configio, system):
-        super().__init__(index, configio, system, 'config')
+    def __init__(self, index, configio, system, top):
+        super().__init__(index, configio, system, top)
 
     def set(self, key, value):
         if key == 'one':
@@ -36,29 +36,23 @@ class MyRunnable(Runnable):
 
 
 def test_configio():
-    d = {'config': [{'item': 1, 'value': 'val1'}, 
-                    {'item': 2, 'value': 'val2', 'cfg': [{'foo': 'bar'}]}],
+    d = {'cameras': [{'name': 'default', 'videoURL': 0, 'defaultFPS': 2, 'qOut': 'frames'}],
          'queues': [{'depth': 120, 'name': 'frames'}],
          '__path__': './test/config-test.yml'}
     c = ConfigIO('./test/config-test.yml')
 
-    if c['config'][0].get('value') == 'val3':
-         c['config'][0]['value'] = 'val1'
+    #if c['queues'][0].get('depth') == 100:
+    #     c['queues'][0]['depth'] = 120
 
     assert c.__dict__ == d
-    e = MyConfigurable(0, c, {})
+    e = MyCustomConfigurable(0, c, {}, 'queues')
     e.__ommitCheckQIn__ = True
     e.__ommitCheckQOut__ = True
-    e.set('value', 'val3')
-    assert c.__dict__['config'][0]['value'] == 'val3'
-    e.set('value', 'val1')
-    assert e.get('value') == 'val1'
+    e.set('depth', 100)
+    assert e.get('depth') == 100
+    e.set('depth', 120)
+    assert e.get('depth') == 120
 
 
 def test_runnable():
     r = MyRunnable()
-    assert r.status() == 'awaiting'
-    r.start()
-    assert r.status() == 'running'
-    r.stop()
-    assert r.status() == 'stopped'
