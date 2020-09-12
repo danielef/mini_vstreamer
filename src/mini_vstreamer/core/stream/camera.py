@@ -64,23 +64,22 @@ class Camera(Configurable, Runnable):
 
             self.__measureFPS()
         else:
-            logging.warn('Camera {} already opened'.format(self.get('name')))
+            logging.warning('Camera {} already opened'.format(self.get('name')))
 
     def __measureFPS(self):
-        logging.warn('mfps: {}'.format(time()))
         if self.__videoCapture__ is None:
-            logging.warn('Camera {} is not opened'.format(self.get('name')))
+            logging.warning('Camera {} is not opened'.format(self.get('name')))
             return
         
         currentFPS = int(self.__videoCapture__.get(cv2.CAP_PROP_FPS))
         defaultFPS = self.get('defaultFPS', 2)
         
         if currentFPS > 120 or currentFPS <= 0:
-            logging.warn('Camera {} using defaultFPS:{}, currentFPS:{} invalid'.format(self.get('name'), defaultFPS, currentFPS))
+            logging.warning('Camera {} using defaultFPS:{}, currentFPS:{} invalid'.format(self.get('name'), defaultFPS, currentFPS))
             self.__videoFPS__ = defaultFPS
         else:
             if defaultFPS != currentFPS:
-                logging.warn('Camera {} using currentFPS:{}, preferred over defaultFPS:{}'.format(self.get('name'), currentFPS, defaultFPS))
+                logging.warning('Camera {} using currentFPS:{}, preferred over defaultFPS:{}'.format(self.get('name'), currentFPS, defaultFPS))
             self.__videoFPS__ = currentFPS
 
         self.__wait__ = 1.0 / self.__videoFPS__
@@ -105,6 +104,7 @@ class Camera(Configurable, Runnable):
                 self.__measureFPS()
             else:
                 self.__outQ__.put((self.get('name'), frame))
+        self.__release()
         return self
 
 
