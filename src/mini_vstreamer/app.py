@@ -8,7 +8,7 @@ from mini_vstreamer.core.stream.queue import mutate_system as load_queues
 from mini_vstreamer.core.stream.camera import mutate_system as load_cameras
 
 def setup(flask_app):
-    #flask_app.config['SERVER_NAME'] = 'localhost:8888'
+    flask_app.config['SERVER_NAME'] = '0.0.0.0:8888'
     flask_app.config['SWAGGER_UI_DOC_EXPANSION'] = 'list'
     flask_app.config['RESTPLUS_VALIDATE'] = True
     flask_app.config['RESTPLUS_MASK_SWAGGER'] = False
